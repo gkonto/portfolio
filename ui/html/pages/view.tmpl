@@ -1,4 +1,4 @@
-{{define "title"}}Project {{.ProjectID}} | Portfolio{{end}}
+{{define "title"}}{{.ProjectTitle}} | Portfolio{{end}}
 
 {{define "head"}}
 <meta
@@ -11,23 +11,10 @@
 <section class="section shell">
   <div class="section-heading">
     <p class="eyebrow">// project detail</p>
-    <h1>Project {{.ProjectID}}</h1>
-    <p>
-      This is the initial project detail template. Replace this placeholder with real project content once
-      the portfolio data model is in place.
-    </p>
-  </div>
-
-  <div class="contact-card">
-    <p class="project-label">route://project/{{.ProjectID}}</p>
-    <h2>The route and template are now wired correctly.</h2>
-    <p>
-      The next step is to load actual project data from files and render a project page based on the route
-      parameter instead of showing a static placeholder.
-    </p>
-    <div class="contact-actions">
-      <a class="button button-primary" href="/">Back Home</a>
-    </div>
+    <h1>{{.ProjectTitle}}</h1>
+    <p>route://project/{{.ProjectID}}</p>
+    <p>This page is intentionally empty for now.</p>
+    <p>Placeholder text.</p>
   </div>
 </section>
 {{end}}

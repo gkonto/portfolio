@@ -178,6 +178,12 @@ ul {
   align-items: start;
 }
 
+.project-link {
+  display: block;
+  min-width: 0;
+  color: inherit;
+}
+
 .project-rectangle,
 .contact-card {
   min-width: 0;
@@ -199,6 +205,17 @@ ul {
   transform: translateY(-3px);
   border-color: var(--accent-strong);
   box-shadow: 0 20px 52px rgba(0, 0, 0, 0.34);
+}
+
+.project-link:hover .project-rectangle,
+.project-link:focus-visible .project-rectangle {
+  transform: translateY(-3px);
+  border-color: var(--accent-strong);
+  box-shadow: 0 20px 52px rgba(0, 0, 0, 0.34);
+}
+
+.project-link:focus-visible {
+  outline: none;
 }
 
 .project-image {
