@@ -93,7 +93,7 @@ ul {
 
 .site-byline {
   display: inline-block;
-  margin-left: 0;
+  margin-left: 0.4rem;
   color: var(--muted);
   font-size: 1rem;
   font-weight: 400;
