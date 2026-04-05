@@ -8,12 +8,12 @@
   <link rel="stylesheet" href="/static/css/main.css">
   {{block "head" .}}{{end}}
 </head>
-<body class="{{block "body_class" .}}page{{end}}">
-  <div class="page-aura page-aura-left" aria-hidden="true"></div>
-  <div class="page-aura page-aura-right" aria-hidden="true"></div>
-
+<body>
   <header class="site-header">
     <div class="shell">
+      <p class="site-kicker">$ go run ./cmd/web</p>
+      <h1 class="site-title">giorgos_kontogiannis</h1>
+      <p class="site-subtitle">// building backend systems in Go with a programmer-first mindset</p>
       {{template "nav" .}}
     </div>
   </header>
@@ -24,12 +24,10 @@
 
   <footer class="site-footer">
     <div class="shell footer-inner">
-      <p>Built with Go, templates, and a small amount of progressive enhancement.</p>
-      <p>Designed to foreground backend engineering work.</p>
+      <p>status: online</p>
+      <p>stack: Go / net-http / html-template</p>
     </div>
   </footer>
-
-  <script src="/static/js/main.js" defer></script>
 </body>
 </html>
 {{end}}

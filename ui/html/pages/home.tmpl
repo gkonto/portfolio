@@ -8,146 +8,60 @@
 {{end}}
 
 {{define "main"}}
-<section class="hero shell">
-  <div class="hero-copy" data-reveal>
-    <p class="eyebrow">Production-minded Go engineer</p>
-    <h1>I build backend systems that stay readable, reliable, and calm under load.</h1>
-    <p class="hero-lead">
-      This portfolio is focused on Go web development, API design, and the kind of pragmatic engineering
-      work that turns unclear requirements into shippable software.
-    </p>
-
-    <div class="hero-actions">
-      <a class="button button-primary" href="#projects">View Projects</a>
-      <a class="button button-secondary" href="#contact">Start a Conversation</a>
-    </div>
-
-    <ul class="signal-list" aria-label="Core strengths">
-      <li>Go web applications with the standard library</li>
-      <li>APIs, internal tools, and backend architecture</li>
-      <li>Clean implementation with tests and maintainable structure</li>
-    </ul>
-  </div>
-
-  <aside class="hero-panel" data-reveal>
-    <div class="hero-panel-card">
-      <p class="panel-label">Current focus</p>
-      <h2>Shipping portfolio work that demonstrates practical Go fundamentals.</h2>
-      <p>
-        Routing, templates, static assets, handlers, deployment preparation, and progressive enhancement
-        without overbuilding the frontend.
-      </p>
-
-      <div class="hero-metrics">
-        <div>
-          <span class="metric-value">Go</span>
-          <span class="metric-label">Primary language</span>
-        </div>
-        <div>
-          <span class="metric-value">SSR</span>
-          <span class="metric-label">Server-rendered HTML</span>
-        </div>
-        <div>
-          <span class="metric-value">Stdlib</span>
-          <span class="metric-label">Framework-light approach</span>
-        </div>
-      </div>
-
-      <img class="hero-graphic" src="/static/img/hero-orbit.svg" alt="" aria-hidden="true">
-    </div>
-  </aside>
-</section>
-
-<section class="section shell" id="about">
-  <div class="section-heading" data-reveal>
-    <p class="eyebrow">About</p>
-    <h2>Backend-first, product-aware, and biased toward clear systems.</h2>
-    <p>
-      I am interested in building software that is easy to operate and easy to extend. That usually means
-      simple interfaces, explicit data flow, good defaults, and an implementation that other engineers can
-      reason about quickly.
-    </p>
-  </div>
-
-  <div class="capability-grid">
-    <article class="capability-card" data-reveal>
-      <h3>Application Design</h3>
-      <p>I care about route structure, handler boundaries, content organization, and pragmatic architecture.</p>
-    </article>
-
-    <article class="capability-card" data-reveal>
-      <h3>Operational Thinking</h3>
-      <p>I build with deployment, observability, and long-term maintainability in mind from the start.</p>
-    </article>
-
-    <article class="capability-card" data-reveal>
-      <h3>Implementation Quality</h3>
-      <p>I prefer readable code, explicit behavior, and small abstractions that earn their complexity.</p>
-    </article>
-  </div>
+<section class="intro shell">
+  <p class="eyebrow">// go backend engineer</p>
+  <h2>Hi, I am Giorgos Kontogiannis.</h2>
+  <p class="intro-copy">
+    I build web applications and backend systems in Go. The portfolio uses a darker, code-oriented visual
+    language: straightforward structure, technical focus, and projects presented like small software modules.
+  </p>
 </section>
 
 <section class="section shell" id="projects">
-  <div class="section-heading" data-reveal>
-    <p class="eyebrow">Selected Projects</p>
-    <h2>Examples of work I want people to remember.</h2>
-    <p>Each project should show the problem, my contribution, the technical decisions, and the final outcome.</p>
+  <div class="section-heading">
+    <h2>Projects</h2>
+    <p>Two dummy projects are shown below. Each project has an image placeholder and a short description.</p>
   </div>
 
-  <div class="project-grid">
-    <article class="project-card" data-reveal>
-      <p class="project-index">01</p>
-      <h3>Go Portfolio Platform</h3>
-      <p>
-        A server-rendered portfolio built to demonstrate Go fundamentals through templates, handlers,
-        static asset serving, and production-oriented structure.
-      </p>
-      <ul class="tag-list" aria-label="Project technologies">
-        <li>Go</li>
-        <li>net/http</li>
-        <li>html/template</li>
-      </ul>
+  <div class="projects-grid">
+    <article class="project-rectangle">
+      <img
+        class="project-image"
+        src="/static/img/project-placeholder.svg"
+        alt="Placeholder preview for Project One"
+      >
+      <div class="project-content">
+        <p class="project-label">dummy://01</p>
+        <h3>Project One</h3>
+        <p>This is a dummy project card with a placeholder image and a short description under the image.</p>
+        <p class="project-stack">stack: Go / templates / routing</p>
+      </div>
     </article>
 
-    <article class="project-card" data-reveal>
-      <p class="project-index">02</p>
-      <h3>API and Internal Tooling Work</h3>
-      <p>
-        Backend services and internal workflows focused on predictable behavior, low operational friction,
-        and maintainable implementation details.
-      </p>
-      <ul class="tag-list" aria-label="Project technologies">
-        <li>REST APIs</li>
-        <li>Data modeling</li>
-        <li>Testing</li>
-      </ul>
-    </article>
-
-    <article class="project-card" data-reveal>
-      <p class="project-index">03</p>
-      <h3>Systems That Evolve Well</h3>
-      <p>
-        Product engineering work where the main value is not only shipping features, but leaving the codebase
-        in a shape that supports the next iteration.
-      </p>
-      <ul class="tag-list" aria-label="Project technologies">
-        <li>Architecture</li>
-        <li>Refactoring</li>
-        <li>Delivery</li>
-      </ul>
+    <article class="project-rectangle">
+      <img
+        class="project-image"
+        src="/static/img/project-placeholder.svg"
+        alt="Placeholder preview for Project Two"
+      >
+      <div class="project-content">
+        <p class="project-label">dummy://02</p>
+        <h3>Project Two</h3>
+        <p>This is a second dummy project card using the same placeholder image and a brief description.</p>
+        <p class="project-stack">stack: APIs / handlers / UI</p>
+      </div>
     </article>
   </div>
 </section>
 
-<section class="section shell section-contact" id="contact">
-  <div class="contact-card" data-reveal>
-    <p class="eyebrow">Contact</p>
-    <h2>If you are hiring for Go or backend engineering work, this is the section that should convert.</h2>
+<section class="section shell" id="contact">
+  <div class="contact-card">
+    <h2>Contact</h2>
     <p>
-      Replace this copy with your preferred contact details, GitHub, LinkedIn, and a stronger call to action
-      once the content is finalized.
+      If you want to talk about Go, backend systems, or possible collaboration, replace these placeholders
+      with your real contact details and links.
     </p>
-    <div class="hero-actions">
+    <div class="contact-actions">
       <a class="button button-primary" href="mailto:hello@example.com">Email Me</a>
       <a class="button button-secondary" href="https://github.com" target="_blank" rel="noreferrer">GitHub</a>
     </div>
