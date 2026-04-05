@@ -26,8 +26,8 @@ func (app *application) projectView(w http.ResponseWriter, r *http.Request) {
 	}
 
 	projects := map[int]string{
-		1: "Project One",
-		2: "Project Two",
+		1: "Algorithm Tutorial Series",
+		2: "Swift Utility App",
 	}
 
 	title, ok := projects[id]
