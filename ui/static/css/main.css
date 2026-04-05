@@ -83,11 +83,23 @@ ul {
 }
 
 .site-title {
-  margin-bottom: 0.4rem;
+  margin-bottom: 0;
   color: #eef6ff;
-  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-size: clamp(1.5rem, 3.2vw, 2.4rem);
   line-height: 1.1;
   letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.site-byline {
+  display: inline-block;
+  margin-left: 0;
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.65;
+  white-space: nowrap;
 }
 
 .site-subtitle {

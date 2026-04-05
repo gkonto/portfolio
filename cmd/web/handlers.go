@@ -13,7 +13,7 @@ type projectPageData struct {
 }
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
-	app.render(w, http.StatusOK, "home.tmpl", nil)
+	app.render(w, http.StatusOK, "home.tmpl.html", nil)
 }
 
 func (app *application) projectView(w http.ResponseWriter, r *http.Request) {
@@ -41,5 +41,5 @@ func (app *application) projectView(w http.ResponseWriter, r *http.Request) {
 		ProjectTitle: title,
 	}
 
-	app.render(w, http.StatusOK, "view.tmpl", data)
+	app.render(w, http.StatusOK, "view.tmpl.html", data)
 }
