@@ -8,7 +8,7 @@ import (
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
-	app.render(w, http.StatusOK, "home.tmpl")
+	app.render(w, http.StatusOK, "home.tmpl", nil)
 }
 
 func (app *application) projectView(w http.ResponseWriter, r *http.Request) {
@@ -20,5 +20,11 @@ func (app *application) projectView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app.render(w, http.StatusOK, "view.tmpl")
+	data := struct {
+		ProjectID int
+	}{
+		ProjectID: id,
+	}
+
+	app.render(w, http.StatusOK, "view.tmpl", data)
 }

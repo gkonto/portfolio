@@ -7,7 +7,7 @@ import (
 	"runtime/debug"
 )
 
-func (app *application) render(w http.ResponseWriter, status int, page string) {
+func (app *application) render(w http.ResponseWriter, status int, page string, data any) {
 	ts, ok := app.templateCache[page]
 	if !ok {
 		err := fmt.Errorf("the template %s does not exist", page)
@@ -17,7 +17,7 @@ func (app *application) render(w http.ResponseWriter, status int, page string) {
 
 	buf := new(bytes.Buffer)
 
-	err := ts.ExecuteTemplate(buf, "base", nil)
+	err := ts.ExecuteTemplate(buf, "base", data)
 	if err != nil {
 		app.serverError(w, err)
 		return

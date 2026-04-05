@@ -1,0 +1,33 @@
+{{define "title"}}Project {{.ProjectID}} | Portfolio{{end}}
+
+{{define "head"}}
+<meta
+  name="description"
+  content="Project detail page for the Go portfolio."
+>
+{{end}}
+
+{{define "main"}}
+<section class="section shell">
+  <div class="section-heading">
+    <p class="eyebrow">Project Detail</p>
+    <h1>Project {{.ProjectID}}</h1>
+    <p>
+      This is the initial project detail template. Replace this placeholder with real project content once
+      the portfolio data model is in place.
+    </p>
+  </div>
+
+  <div class="contact-card">
+    <p class="panel-label">Current State</p>
+    <h2>The route and template are now wired correctly.</h2>
+    <p>
+      The next step is to load actual project data from files and render a project page based on the route
+      parameter instead of showing a static placeholder.
+    </p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="/">Back Home</a>
+    </div>
+  </div>
+</section>
+{{end}}

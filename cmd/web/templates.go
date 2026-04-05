@@ -21,7 +21,7 @@ func newTemplateCache() (map[string]*template.Template, error) {
 			return nil, err
 		}
 
-		ts, err = template.ParseFiles("./ui/html/partials/*.tmpl")
+		ts, err = ts.ParseGlob("./ui/html/partials/*.tmpl")
 		if err != nil {
 			return nil, err
 		}
