@@ -7,13 +7,12 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-type projectPageData struct {
-	ProjectID    int
-	ProjectTitle string
-}
-
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
-	app.render(w, http.StatusOK, "home.tmpl.html", nil)
+	data := homePageData{
+		Projects: portfolioProjects,
+	}
+
+	app.render(w, http.StatusOK, "home.tmpl.html", data)
 }
 
 func (app *application) contact(w http.ResponseWriter, r *http.Request) {
@@ -29,21 +28,11 @@ func (app *application) projectView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	projects := map[int]string{
-		1: "Algorithm Tutorial Series",
-		2: "Swift Utility App",
-	}
-
-	title, ok := projects[id]
+	project, ok := getProjectByID(id)
 	if !ok {
 		app.notFound(w)
 		return
 	}
 
-	data := projectPageData{
-		ProjectID:    id,
-		ProjectTitle: title,
-	}
-
-	app.render(w, http.StatusOK, "view.tmpl.html", data)
+	app.render(w, http.StatusOK, "view.tmpl.html", project)
 }

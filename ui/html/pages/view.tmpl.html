@@ -3,16 +3,84 @@
 {{define "head"}}
 <meta
   name="description"
-  content="Project detail page for the programming portfolio."
+  content="{{.PageSummary}}"
 >
 {{end}}
 
 {{define "main"}}
 <section class="section shell">
-  <div class="section-heading">
-    <p class="eyebrow">// project detail</p>
-    <h1>{{.ProjectTitle}}</h1>
-    <p>This page is intentionally empty for now.</p>
-  </div>
+  <article class="project-page">
+    <header class="project-header">
+      <p class="eyebrow">// {{.Label}}</p>
+      <h1>{{.ProjectTitle}}</h1>
+      <p class="project-summary">{{.PageSummary}}</p>
+      {{if .RepoURL}}
+      <p class="project-links">
+        <a class="project-action" href="{{.RepoURL}}" target="_blank" rel="noreferrer">view source</a>
+      </p>
+      {{end}}
+      {{if .ShowcaseImages}}
+      <div class="project-showcase-grid">
+        {{range .ShowcaseImages}}
+        <div class="project-showcase">
+          <img src="{{.Path}}" alt="{{.Alt}}">
+        </div>
+        {{end}}
+      </div>
+      {{end}}
+      <p class="project-stack-line">{{.Stack}}</p>
+    </header>
+
+    {{if .Placeholder}}
+    <section class="project-panel project-panel--placeholder">
+      <h2>Under construction</h2>
+      <p>This entry is still empty for now.</p>
+    </section>
+    {{else}}
+    <section class="project-panel">
+      <h2>Overview</h2>
+      {{range .Intro}}
+      <p>{{.}}</p>
+      {{end}}
+    </section>
+
+    <div class="project-columns">
+      {{range .FeatureGroups}}
+      <section class="project-panel">
+        <h2>{{.Title}}</h2>
+        <ul class="project-list">
+          {{range .Items}}
+          <li>{{.}}</li>
+          {{end}}
+        </ul>
+      </section>
+      {{end}}
+    </div>
+
+    <div class="project-columns">
+      <section class="project-panel">
+        <h2>Workflow</h2>
+        <ul class="project-list">
+          <li>Generate a preprocessed <code>.ii</code> file with <code>g++</code>.</li>
+          <li>Run IncLens against that file.</li>
+        </ul>
+
+        <div class="code-samples">
+          <pre><code>{{.GenerateCommand}}</code></pre>
+          <pre><code>{{.RunCommand}}</code></pre>
+        </div>
+      </section>
+
+      <section class="project-panel">
+        <h2>Why it matters</h2>
+        <ul class="project-list">
+          <li>It gives a fast way to inspect C++ dependency structure.</li>
+          <li>It helps surface heavy includes before they turn into larger compile-time issues.</li>
+          <li>It keeps the analysis in the terminal, which fits well into an existing C++ workflow.</li>
+        </ul>
+      </section>
+    </div>
+    {{end}}
+  </article>
 </section>
 {{end}}

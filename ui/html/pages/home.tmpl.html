@@ -9,38 +9,29 @@
 
 {{define "main"}}
 <section class="section shell" id="projects">
-  <div class="projects-grid">
-    <a class="project-link" href="/project/view/1">
-      <article class="project-rectangle">
-        <img
-          class="project-image"
-          src="/static/img/project-placeholder.svg"
-          alt="Placeholder preview for Project One"
-        >
-        <div class="project-content">
-          <p class="project-label">tutorial://algorithms</p>
-          <h3>Algorithm Tutorial Series</h3>
-          <p>A placeholder entry for tutorials explaining programming concepts, problem solving, and implementation details.</p>
-          <p class="project-stack">stack: C++ / algorithms / notes</p>
-        </div>
-      </article>
-    </a>
+  <div class="section-heading">
+    <p class="eyebrow">// projects</p>
+    <h2>Things I have built, explored, or written up.</h2>
+  </div>
 
-    <a class="project-link" href="/project/view/2">
+  <div class="projects-grid">
+    {{range .Projects}}
+    <a class="project-link" href="/project/view/{{.ProjectID}}">
       <article class="project-rectangle">
         <img
           class="project-image"
-          src="/static/img/project-placeholder.svg"
-          alt="Placeholder preview for Project Two"
+          src="{{.ImagePath}}"
+          alt="{{.ImageAlt}}"
         >
         <div class="project-content">
-          <p class="project-label">app://swift-utility</p>
-          <h3>Swift Utility App</h3>
-          <p>A placeholder entry for an application project, focused on design decisions, features, and implementation notes.</p>
-          <p class="project-stack">stack: Swift / app development / tooling</p>
+          <p class="project-label">{{.Label}}</p>
+          <h3>{{.ProjectTitle}}</h3>
+          <p>{{.CardSummary}}</p>
+          <p class="project-stack">{{.Stack}}</p>
         </div>
       </article>
     </a>
+    {{end}}
   </div>
 </section>
 {{end}}
