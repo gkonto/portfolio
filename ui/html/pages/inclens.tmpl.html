@@ -1,9 +1,9 @@
-{{define "title"}}IncLens | Portfolio{{end}}
+{{define "title"}}{{.Title}} | Portfolio{{end}}
 
 {{define "head"}}
 <meta
   name="description"
-  content="IncLens is a terminal-based C++ include inspector that visualizes include relationships as a tree view or flamegraph."
+  content="{{.Summary}}"
 >
 {{end}}
 
@@ -11,11 +11,10 @@
 <section class="section shell">
   <article class="project-page">
     <header class="project-header">
-      <p class="eyebrow">// tool://inclens</p>
-      <h1>IncLens</h1>
-      <p class="project-summary">A terminal-based C++ include inspector that reads a preprocessed <code>.ii</code> file and visualizes include relationships as either a navigable tree or a flamegraph.</p>
+      <h1>{{.Title}}</h1>
+      <p class="project-summary">{{.Summary}}</p>
       <p class="project-links">
-        <a class="project-action" href="https://github.com/gkonto/IncLens" target="_blank" rel="noreferrer">view source</a>
+        <a class="project-action" href="{{.RepoURL}}" target="_blank" rel="noreferrer">view source</a>
       </p>
 
       <div class="project-showcase-grid">
@@ -30,92 +29,56 @@
       </div>
 
       <div class="project-tags project-tags--header" aria-label="Project technologies">
-        <span class="project-tag">Go</span>
-        <span class="project-tag">Bubble Tea</span>
-        <span class="project-tag">C++</span>
-        <span class="project-tag">include analysis</span>
+        {{range .Tags}}
+        <span class="project-tag">{{.}}</span>
+        {{end}}
       </div>
     </header>
 
     <div class="project-body">
-    <section class="project-section">
-      <h2>Overview</h2>
-      <p class="project-lead">IncLens takes something most people never want to read directly, a preprocessed C++ source file, and turns it into an interface you can actually navigate.</p>
-      <p>It is built around a very practical workflow: generate a preprocessed translation unit with <code>g++</code>, feed the resulting <code>.ii</code> file into the tool, and then inspect the include structure from the terminal instead of scrolling through raw preprocessor output.</p>
-      <p>The value is straightforward. It helps make dependency structure visible, surfaces heavy includes earlier, and gives a faster path to compile-time investigation when the include graph starts getting harder to reason about by inspection.</p>
-    </section>
+      <section class="project-section">
+        <h2>Overview</h2>
+        <p class="project-lead">IncLens is a terminal UI for exploring C++ include relationships from a preprocessed translation unit.</p>
+        <p>The tool reads a <code>.ii</code> file produced by <code>g++</code> and turns it into something that is much easier to inspect. Instead of staring at a long preprocessed file and trying to mentally reconstruct where everything came from, you get an interactive view of the include hierarchy and a second view that emphasizes relative size. Both views are aimed at the same practical question: <strong>what code ended up in this translation unit, how did it get there, and which parts of that expanded result carry most of the weight</strong>.</p>
+        <p>That makes IncLens useful in a fairly specific part of the workflow. It is not trying to replace the compiler, edit source files, or act as a general-purpose C++ IDE. The scope is narrower than that. Once preprocessing has already happened, the tool gives you a way to inspect the resulting include structure without having to work directly with the raw expanded text.</p>
+      </section>
 
-    <section class="project-section">
-      <h2>The input model</h2>
-      <p>The whole tool is built around the idea that the preprocessed file already contains the structure you need, but not in a form that is pleasant to inspect.</p>
-      <blockquote class="project-callout">
-        <p>A <code>.ii</code> file is the fully preprocessed C++ source after <code>#include</code> expansion and macro processing. IncLens treats that as a data source for include analysis instead of as something meant for humans to read line by line.</p>
-      </blockquote>
-      <p>That makes the tool feel focused. It is not trying to be a general-purpose IDE, compiler frontend, or indexing service. It does one thing: turn preprocessor output into something navigable and useful.</p>
-    </section>
+      <section class="project-section">
+        <h2>The input model</h2>
+        <p>IncLens starts from a simple assumption: the preprocessed file already contains the information you need, but the raw form is difficult to work with directly. A translation unit may pull in a large amount of transitive content, and while that information is technically present after preprocessing, it is not presented in a way that is pleasant to explore line by line.</p>
+        <blockquote class="project-callout">
+          <p>A <code>.ii</code> file is the fully preprocessed C++ source after <code>#include</code> expansion and macro processing. IncLens treats that as a data source for include analysis instead of as something meant for humans to read line by line.</p>
+        </blockquote>
+        <p>This choice keeps the scope narrow and concrete. The tool works from the artifact that the compiler already produced rather than trying to parse an entire project directly. In practice that means you can point it at one translation unit at a time and inspect the include relationships that actually participate in that compile, which is often the exact level of detail you want when you are trying to understand where size or complexity is coming from.</p>
+      </section>
 
-    <section class="project-section">
-      <h2>Two views of the same problem</h2>
-      <p>The README sets the product up around two complementary views. That is the right design choice here, because include structure has two different questions behind it: what includes what, and where is the weight actually concentrated.</p>
+      <section class="project-section">
+        <h2>What the two views show</h2>
+        <p>The tool offers two complementary views of the same translation unit. The <strong>tree view</strong> is the more literal one. It shows the include hierarchy directly, which makes it the natural starting point when you want to understand which headers include which other headers and how a particular branch expands through transitive includes. In that mode the interaction is mostly about navigation and inspection: expanding or collapsing nodes, searching through the hierarchy, jumping between matches, and changing visible columns or sort order so the tree is not only descriptive but also useful for comparison.</p>
+        <p>The <strong>flamegraph view</strong> approaches the same data from a different direction. Instead of emphasizing exact parent-child structure first, it emphasizes proportional weight based on total lines of code. That makes it easier to answer a slightly different question: not only where the hierarchy goes, but which parts of it dominate the expanded translation unit. Arrow-key navigation, zooming in with <code>Enter</code>, zooming out with <code>Esc</code>, and checking the current file name and line count in the information area make that view practical rather than decorative.</p>
+        <p>Together, the two views cover the two situations I would care about most. Sometimes I want to walk the hierarchy directly and understand why a particular header appears where it does. At other times I want to identify the branches that occupy disproportionate space so I can decide what deserves a closer look. IncLens keeps both tasks close to the same data instead of treating them as separate tools.</p>
+      </section>
 
-      <p class="project-subheading">Top-down tree view</p>
-      <p>The tree view is the structural mode. This is the one you use when you want to walk the include hierarchy in a way that still feels close to the source-level mental model.</p>
-      <ul class="project-list">
-        <li>Navigate the include hierarchy as a tree.</li>
-        <li>Expand and collapse nodes with keyboard controls.</li>
-        <li>Search includes and jump through matches.</li>
-        <li>Show or hide columns and sort by bytes or lines of code.</li>
-      </ul>
-      <p>The useful detail is that this is not just a raw tree dump. The sorting controls and file metrics make it a diagnostic view, not just a visualization.</p>
+      <section class="project-section">
+        <h2>Where it can be useful</h2>
+        <p>IncLens is most useful once the include graph is large enough that reasoning about it mentally becomes inconvenient. That can happen when you are opening an unfamiliar translation unit in a large codebase, when a compile seems to be pulling in much more code than expected, or when you want to see whether a refactor around header boundaries actually changed the expanded shape of the program. It is also a practical way to inspect third-party dependencies that bring in long include chains and to identify headers that contribute a large amount of transitive content even if they do not look especially heavy from the original source.</p>
+        <p>I also see it as a companion to other compile-time investigation tools rather than a replacement for them. A build trace, timing report, or profiler can tell you that a translation unit is expensive. IncLens helps answer a more structural question afterward by showing how the expanded include graph is arranged and where the larger branches are concentrated.</p>
+      </section>
 
-      <p class="project-subheading">Flamegraph view</p>
-      <p>The flamegraph mode is the proportional mode. Instead of asking for exact structure first, it asks where the code volume is concentrated and how large different parts of the include tree actually are.</p>
-      <ul class="project-list">
-        <li>Visualize total lines of code proportionally.</li>
-        <li>Move through the graph with arrow keys.</li>
-        <li>Zoom in with <code>Enter</code> and back out with <code>Esc</code>.</li>
-        <li>Inspect the current file name and line count in the info panel.</li>
-      </ul>
-      <p>That pairing works well. The tree helps with orientation, and the flamegraph helps with weight.</p>
-    </section>
+      <section class="project-section">
+        <h2>Workflow and interaction</h2>
+        <p>The workflow is short and explicit. First, generate a preprocessed <code>.ii</code> file with the compiler. Then run IncLens against that file and move between the tree view and the flamegraph depending on whether you want <em>exact structure</em> or a better sense of <em>proportional size</em>. The setup stays small as well: clone the repository, run <code>./setup.sh</code>, and use Go 1.20 or newer.</p>
+        <div class="code-samples">
+          <pre><code>g++ -E -o example.ii example.cpp</code></pre>
+          <pre><code>./inclensapp -file example.ii</code></pre>
+        </div>
+        <p>The keyboard controls are an important part of why the interface works. In the tree view, <code>Enter</code>, <code>e</code>, and <code>c</code> manage expansion and collapse, <code>/</code> and <code>n</code> support searching through the graph, and <code>F1</code>, <code>F2</code>, <code>0</code>, and <code>1</code> let you change visible columns and sorting. In the flamegraph, the interaction is simpler: move with the arrow keys, zoom in with <code>Enter</code>, and step back out with <code>Esc</code>. None of that is flashy, but it gives both views the amount of control they need to be useful in a real terminal session.</p>
+      </section>
 
-    <section class="project-section">
-      <h2>Workflow</h2>
-      <p>The user flow is intentionally small, which is part of the appeal. There is no large setup story and no complicated project indexing step in the README. You prepare the input once, then run the tool.</p>
-      <ul class="project-list">
-        <li>Generate a preprocessed <code>.ii</code> file with <code>g++</code>.</li>
-        <li>Run IncLens against that file.</li>
-        <li>Switch between the tree view and flamegraph depending on whether you want structure or proportional weight.</li>
-      </ul>
-
-      <div class="code-samples">
-        <pre><code>g++ -E -o example.ii example.cpp</code></pre>
-        <pre><code>./inclensapp -file example.ii</code></pre>
-      </div>
-      <p>The installation story in the README is similarly light: clone the repository, run <code>./setup.sh</code>, and use Go 1.20+.</p>
-    </section>
-
-    <section class="project-section">
-      <h2>Interaction details that make it better</h2>
-      <p>The project gets more convincing once you look at the small controls rather than just the headline features.</p>
-      <ul class="project-list">
-        <li>Search and next-match navigation matter because real include graphs get wide quickly.</li>
-        <li>Expand-all and collapse-all help when you need to reset your view after drilling in.</li>
-        <li>Column toggling and sort options turn the tree into a usable investigation surface instead of a static diagram.</li>
-        <li>Keyboard-driven zoom in the flamegraph keeps the whole experience inside the terminal workflow.</li>
-      </ul>
-    </section>
-
-    <section class="project-section">
-      <h2>Why it works well as a project</h2>
-      <p>What I like most about it is that the scope is narrow, the workflow is clear, and the output is genuinely useful if you work in C++.</p>
-      <ul class="project-list">
-        <li>It takes a noisy artifact and turns it into something readable.</li>
-        <li>It stays in the terminal, which fits naturally into a C++ workflow.</li>
-        <li>It focuses on a narrow problem and gives two useful views of the same data.</li>
-        <li>It is a good example of a tool that feels small in interface but still solves a real engineering pain point.</li>
-      </ul>
-    </section>
+      <section class="project-section">
+        <h2>Scope</h2>
+        <p>One thing I like about the project is that the scope stays clear throughout. It focuses on one stage of the C++ workflow, preprocessing, and tries to make that stage easier to inspect without expanding into a much larger system. It stays in the terminal, uses a real compiler artifact as input, and gives two views that answer different questions about the same translation unit. That keeps it easy to place in an existing workflow because the setup is small, the input is explicit, and the job of the tool remains narrow enough to stay understandable.</p>
+      </section>
     </div>
   </article>
 </section>

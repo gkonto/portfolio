@@ -17,9 +17,9 @@ func (app *application) contact(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) inclens(w http.ResponseWriter, r *http.Request) {
-	app.render(w, http.StatusOK, "inclens.tmpl.html", nil)
+	app.render(w, http.StatusOK, "inclens.tmpl.html", inclensPage)
 }
 
 func (app *application) monkeyInCPP(w http.ResponseWriter, r *http.Request) {
-	app.render(w, http.StatusOK, "monkey-in-cpp.tmpl.html", nil)
+	app.render(w, http.StatusOK, "monkey-in-cpp.tmpl.html", monkeyInCPPPage)
 }

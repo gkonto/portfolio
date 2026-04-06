@@ -14,6 +14,14 @@ type homePageData struct {
 	Projects []projectCardData
 }
 
+type projectPageData struct {
+	Title   string
+	Label   string
+	Summary string
+	RepoURL string
+	Tags    []string
+}
+
 var portfolioProjects = []projectCardData{
 	{
 		Title:       "IncLens",
@@ -33,4 +41,20 @@ var portfolioProjects = []projectCardData{
 		ImageAlt:    "Illustration showing 2 plus 3 times 4 and its syntax tree",
 		ProjectHref: "/projects/monkey-in-cpp",
 	},
+}
+
+var inclensPage = projectPageData{
+	Title:   "IncLens",
+	Label:   "tool://inclens",
+	Summary: "A terminal-based C++ include inspector that reads a preprocessed .ii file and visualizes include relationships as either a navigable tree or a flamegraph.",
+	RepoURL: "https://github.com/gkonto/IncLens",
+	Tags:    []string{"Go", "C++", "TUI"},
+}
+
+var monkeyInCPPPage = projectPageData{
+	Title:   "Monkey in C++",
+	Label:   "lang://monkey-interpreter",
+	Summary: "A C++ implementation of the Monkey programming language from Writing an Interpreter in Go, built as a tree-walking interpreter with a lexer, Pratt parser, explicit AST, evaluator, small REPL, and Catch2-based test suite.",
+	RepoURL: "https://github.com/gkonto/monkey_in_cpp",
+	Tags:    []string{"C++", "CMake", "Catch2", "Interpreters"},
 }

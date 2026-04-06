@@ -1,9 +1,9 @@
-{{define "title"}}Monkey in C++ | Portfolio{{end}}
+{{define "title"}}{{.Title}} | Portfolio{{end}}
 
 {{define "head"}}
 <meta
   name="description"
-  content="Monkey in C++ is a tree-walking interpreter for the Monkey language built with a Pratt parser, explicit AST, REPL, tests, and runtime-oriented optimization work."
+  content="{{.Summary}}"
 >
 {{end}}
 
@@ -11,126 +11,74 @@
 <section class="section shell">
   <article class="project-page project-page--wide">
     <header class="project-header">
-      <p class="eyebrow">// lang://monkey-interpreter</p>
-      <h1>Monkey in C++</h1>
-      <p class="project-summary">A C++ implementation of the Monkey programming language from <em>Writing an Interpreter in Go</em>, built as a tree-walking interpreter with a lexer, Pratt parser, explicit AST, evaluator, small REPL, and Catch2-based test suite.</p>
+      <h1>{{.Title}}</h1>
+      <p class="project-summary">{{.Summary}}</p>
       <p class="project-links">
-        <a class="project-action" href="https://github.com/gkonto/monkey_in_cpp" target="_blank" rel="noreferrer">view source</a>
+        <a class="project-action" href="{{.RepoURL}}" target="_blank" rel="noreferrer">view source</a>
       </p>
       <div class="project-showcase project-showcase--single">
         <img src="/static/img/monkey-in-cpp-card.png" alt="Illustration showing 2 plus 3 times 4 and its syntax tree">
       </div>
       <div class="project-tags project-tags--header" aria-label="Project technologies">
-        <span class="project-tag">C++</span>
-        <span class="project-tag">CMake</span>
-        <span class="project-tag">Catch2</span>
-        <span class="project-tag">interpreter internals</span>
+        {{range .Tags}}
+        <span class="project-tag">{{.}}</span>
+        {{end}}
       </div>
     </header>
 
     <div class="project-body project-body--wide">
-    <section class="project-section">
-      <h2>Overview</h2>
-      <p class="project-lead">This repository follows the same general path as Thorsten Ball’s Monkey interpreter, but the implementation is written in modern C++ and extends the runtime side of the project quite a bit beyond the tutorial baseline.</p>
-      <p>At a high level, it is a tree-walking interpreter with a lexer, a Pratt parser, an explicit AST, an evaluator that walks that AST, a small REPL, and a Catch2-based test suite.</p>
-      <p>The README also makes the project’s direction clear: this is still an interpreter rather than a compiler or VM, but it includes a substantial amount of work around symbol resolution, runtime values, temporary versus persistent storage, and profiling-driven performance improvements.</p>
-    </section>
+      <section class="project-section">
+        <h2>Overview</h2>
+        <p class="project-lead">This project follows the general path of the Monkey interpreter from <em>Writing an Interpreter in Go</em>, but the implementation is written in modern C++ and goes further into the runtime side of the interpreter than the tutorial baseline usually does.</p>
+        <p>At a high level it is a <strong>tree-walking interpreter</strong> with a lexer, a Pratt parser, an explicit AST, an evaluator that walks that AST, a small REPL, and a Catch2-based test suite. The familiar educational shape is still there, but the repository also spends a lot of effort on how symbols are resolved, how values are represented at runtime, which allocations should be temporary, and how profiling changes the design once the implementation starts to grow beyond the smallest examples.</p>
+        <p>It is still an interpreter rather than a compiler or a VM, so the core model remains direct and readable. That is part of what I like about it. The code keeps the language pipeline visible from lexing all the way to evaluation, while still making room for performance-oriented changes that matter once recursion, closures, arrays, hashes, and repeated evaluation start stressing the runtime.</p>
+      </section>
 
-    <section class="project-section">
-      <h2>What it is</h2>
-      <p>Monkey is a small dynamically typed language, and this implementation covers the pieces you would expect from that style of interpreter project.</p>
-      <ul class="project-list">
-        <li>Integers, booleans, prefix and infix expressions.</li>
-        <li><code>if</code> / <code>else</code>, <code>let</code>, and <code>return</code>.</li>
-        <li>Functions and closures.</li>
-        <li>Strings, arrays, hashes, indexing, and builtins like <code>len</code>, <code>first</code>, <code>last</code>, <code>rest</code>, and <code>push</code>.</li>
-      </ul>
-      <p>That language surface is broad enough that the project quickly stops being only about parsing syntax. Once closures, arrays, hashes, and recursive calls are part of the runtime, the data model and execution path start to matter a lot more.</p>
-    </section>
-
-    <section class="project-section">
-      <h2>Technical overview</h2>
-      <p>The parser is a Pratt parser, which means expression parsing is driven by token precedence and small prefix and infix parse functions instead of a large grammar table.</p>
-      <div class="code-samples">
-        <pre><code>1 + 2 * 3
+      <section class="project-section">
+        <h2>Language and interpreter structure</h2>
+        <p>Monkey is a small dynamically typed language, and this implementation covers the language features you would expect from that kind of project: integers and booleans, prefix and infix expressions, <code>if</code> / <code>else</code>, <code>let</code>, and <code>return</code>, along with functions, closures, strings, arrays, hashes, indexing, and builtin operations such as <code>len</code>, <code>first</code>, <code>last</code>, <code>rest</code>, and <code>push</code>. That language surface is broad enough that the project quickly stops being only about recognizing syntax. Once closures, arrays, hashes, and recursive calls are involved, the runtime representation and evaluation path start to matter just as much as the parser.</p>
+        <p>The parser is a <strong>Pratt parser</strong>, so expression parsing is driven by token precedence and small prefix and infix parse functions instead of a large grammar table. Source text is tokenized by the lexer, parsed into an AST, passed through a resolver that assigns indexed references for globals, locals, and builtins, and then evaluated by recursively walking the tree. That overall pipeline stays simple enough to follow while still showing the full shape of an interpreter.</p>
+        <div class="code-samples">
+          <pre><code>1 + 2 * 3
 add(1, 2, 3)
 array[1 + 1]</code></pre>
-      </div>
-      <p>The parser produces an AST, and evaluation is then done by recursively walking that tree to produce runtime values. The README breaks the full flow into four steps.</p>
-      <ol class="project-list project-steps">
-        <li>The lexer turns source text into tokens.</li>
-        <li>The Pratt parser turns tokens into an AST.</li>
-        <li>A resolver assigns indexed symbols for globals, locals, and builtins.</li>
-        <li>The evaluator walks the AST and computes results.</li>
-      </ol>
-    </section>
+        </div>
+        <p>The AST is important because it preserves meaning that would be awkward to recover from raw text. An expression like <code>1 + 2 * 3</code> is not just a string of tokens. Once parsed, it becomes a tree where precedence is explicit, so evaluation can operate on semantics rather than on surface order. That is why a tree-walking interpreter can stay conceptually straightforward while still handling nontrivial expressions correctly.</p>
+      </section>
 
-    <section class="project-section">
-      <h2>Very brief AST theory</h2>
-      <p>The AST section in the README is useful because it explains why parsing matters beyond just turning text into nodes. The tree shape is what preserves meaning.</p>
-      <div class="code-samples">
-        <pre><code>1 + 2 * 3</code></pre>
-        <pre><code>(1 + (2 * 3))</code></pre>
-      </div>
-      <p>Instead of working on raw text, the evaluator gets a structure where precedence is already encoded. That is what lets evaluation operate semantically rather than textually.</p>
-    </section>
-
-    <section class="project-section">
-      <h2>Language examples</h2>
-      <p>The README includes examples for the major language features, which makes the implementation easier to evaluate from the outside.</p>
-
-      <p class="project-subheading">Bindings</p>
-      <div class="code-samples">
-        <pre><code>let a = 5;
+      <section class="project-section">
+        <h2>Examples from the language</h2>
+        <p>The easiest way to understand the scope of the implementation is to look at the kinds of programs it already handles. Simple bindings and arithmetic work as expected, comparisons and conditionals behave normally, and the structure is expressive enough to support user-defined functions and closures. That moves the interpreter past toy arithmetic fairly quickly and into the territory where environments, captured values, and function application become real concerns for the runtime.</p>
+        <div class="code-samples">
+          <pre><code>let a = 5;
 let b = a * 2;
 b;</code></pre>
-      </div>
-
-      <p class="project-subheading">Arithmetic and comparisons</p>
-      <div class="code-samples">
-        <pre><code>1 + 2 * 3;
+          <pre><code>1 + 2 * 3;
 10 / 2;
 1 &lt; 2;
 1 == 1;
 true != false;</code></pre>
-      </div>
-
-      <p class="project-subheading">Conditionals</p>
-      <div class="code-samples">
-        <pre><code>if (1 &lt; 2) {
+          <pre><code>if (1 &lt; 2) {
   10
 } else {
   20
 }</code></pre>
-      </div>
-
-      <p class="project-subheading">Functions and closures</p>
-      <div class="code-samples">
-        <pre><code>let newAdder = fn(x) {
+          <pre><code>let newAdder = fn(x) {
   fn(y) { x + y; };
 };
 
 let addTwo = newAdder(2);
 addTwo(3);</code></pre>
-      </div>
-
-      <p class="project-subheading">Strings</p>
-      <div class="code-samples">
-        <pre><code>"Hello" + " " + "World!";
+        </div>
+        <p>The language also includes strings, arrays, hashes, and a small set of builtins, which helps exercise more of the evaluator and object model than a purely arithmetic language would. Concatenating strings, indexing into arrays, extending them with <code>push</code>, or accessing hash values with different key types all stress different parts of the interpreter and make the implementation more representative of a real dynamic language runtime.</p>
+        <div class="code-samples">
+          <pre><code>"Hello" + " " + "World!";
 len("hello");</code></pre>
-      </div>
-
-      <p class="project-subheading">Arrays</p>
-      <div class="code-samples">
-        <pre><code>let xs = [1, 2, 3];
+          <pre><code>let xs = [1, 2, 3];
 xs[1];
 push(xs, 4);
 rest(xs);</code></pre>
-      </div>
-
-      <p class="project-subheading">Hashes</p>
-      <div class="code-samples">
-        <pre><code>let m = {
+          <pre><code>let m = {
   "one": 1,
   "two": 2,
   true: 3
@@ -138,14 +86,14 @@ rest(xs);</code></pre>
 
 m["one"];
 m[true];</code></pre>
-      </div>
-    </section>
+        </div>
+      </section>
 
-    <section class="project-section">
-      <h2>Example program</h2>
-      <p>The README uses recursive Fibonacci as the main benchmark example, but it is also a useful demonstration that the language semantics work end to end.</p>
-      <div class="code-samples">
-        <pre><code>let fibonacci = fn(x) {
+      <section class="project-section">
+        <h2>Example program</h2>
+        <p>Recursive Fibonacci is a useful example here because it does two jobs at once. It demonstrates that functions, branching, recursion, integer arithmetic, and return values all work together end to end, and it also provides a consistent benchmark that puts visible pressure on the evaluator. A small interpreter can look complete when it only runs simple expressions, but a recursive program immediately exposes where the hot paths and allocation costs actually live.</p>
+        <div class="code-samples">
+          <pre><code>let fibonacci = fn(x) {
   if (x == 0) {
     0
   } else {
@@ -158,161 +106,54 @@ m[true];</code></pre>
 };
 
 fibonacci(10);</code></pre>
-      </div>
-    </section>
+        </div>
+      </section>
 
-    <section class="project-section">
-      <h2>Performance notes</h2>
-      <p>This is still an AST interpreter, not a compiler or VM. Even so, the README shows a clear line of performance work and local measurements that improved over time.</p>
-      <blockquote class="project-callout">
-        <p>The current optimized <code>fibonacci(33)</code> benchmark is described in the README as roughly <code>~1.3s - 1.6s</code> wall-clock with peak memory around <code>~1.6MB - 1.8MB</code> on the local machine.</p>
-      </blockquote>
-      <ul class="project-list">
-        <li>Local <code>fibonacci(33)</code> measurements are around <code>~1.3s - 1.6s</code> with the optimized preset.</li>
-        <li>Peak memory is reported around <code>~1.6MB - 1.8MB</code>.</li>
-        <li>The main remaining bottleneck is still the nature of recursive AST evaluation, not a single obvious memory-management issue.</li>
-      </ul>
-      <p>Those figures are described as local measurements rather than a formal benchmark suite, which is a sensible distinction to keep.</p>
-    </section>
+      <section class="project-section">
+        <h2>Runtime and performance work</h2>
+        <p>This is still an AST interpreter, not a compiler or VM, so there is a natural ceiling to how fast it can get. Even so, the runtime side of the project is one of the most interesting parts because the implementation was repeatedly profiled and reworked instead of being left at the first correct version. The local <code>fibonacci(33)</code> measurements currently land around <strong><code>~1.3s - 1.6s</code></strong> wall-clock with peak memory around <strong><code>~1.6MB - 1.8MB</code></strong> on the local machine. Those numbers are explicitly local measurements rather than a formal benchmark suite, but they still show how much the runtime changed over time.</p>
+        <blockquote class="project-callout">
+          <p>The current optimized <code>fibonacci(33)</code> benchmark is roughly <code>~1.3s - 1.6s</code> wall-clock with peak memory around <code>~1.6MB - 1.8MB</code> on the local machine.</p>
+        </blockquote>
+        <p>The profiling history is useful because it shows how the bottleneck moved as each layer improved. Early versions spent a lot of time in evaluator dispatch and RTTI-style type checks. After that was improved, runtime name lookup became more visible. Once lookup was less expensive, allocation and ownership churn became the dominant problem. After the <code>Value</code> and arena refactor, the next problem was not general heap cost so much as recursive call frames being kept alive longer than necessary. After temporary call-frame separation, what remained was mostly the expected cost of recursive AST evaluation, plus smaller overhead around argument handling and the rest of the interpreter machinery.</p>
+        <p>Several implementation changes sit underneath that progression. AST nodes carry an explicit <code>NodeType</code>, which lets the evaluator dispatch by node kind instead of leaning on heavier runtime type paths. Name resolution is moved partly out of the hot path by assigning indexed symbols for globals, locals, and builtins ahead of time, which reduces string-based environment work during evaluation and makes repeated recursive calls less expensive. The runtime value model is also deliberately split: simple values such as <code>int</code>, <code>bool</code>, and <code>null</code> use immediate representations, while composite values remain heap-backed only where that is actually needed.</p>
+        <p>Lifetime management is where the project becomes particularly interesting. Temporary composite values created during evaluation go through a <strong><code>ScratchArena</code></strong>, while values that genuinely need to outlive the current scratch lifetime live in a <strong><code>PersistentStore</code></strong>. The transition between those two worlds is explicit through operations like <code>promote(Value, PersistentStore&amp;)</code> and <code>detach(Value)</code>, which makes it much clearer when a value is escaping and when it should remain temporary. That explicit separation became especially important for recursive execution, where normal calls now use temporary stack-like <code>Environment</code> frames and persistent storage is reserved for closures or returned values that actually need to survive beyond the current evaluation context.</p>
+        <p>There are also smaller but still meaningful changes around the edges. Common cases with zero, one, or two arguments avoid allocating a <code>std::vector&lt;Value&gt;</code>, which helps with benchmark shapes like Fibonacci where tiny calls happen over and over again. On the build side, the repository exposes several CMake presets, including <code>release</code>, <code>release-lto</code>, and <code>release-native-lto</code>, so the optimized measurements can be read together with the exact build configuration that produced them. At this point the main remaining bottleneck is less about one missed allocation trick and more about the nature of the interpreter itself: <em>recursive AST evaluation</em>, repeated tree-walking through <code>eval_node</code>, and the ordinary overhead of an interpreter handling calls, branching, and expressions directly. A substantially larger speedup would probably require moving toward compilation or a VM rather than continuing to reshape the AST evaluator alone.</p>
+      </section>
 
-    <section class="project-section">
-      <h2>Profiling observations</h2>
-      <p>The optimization work is organized around repeated profiling of the <code>fibonacci(33)</code> benchmark. The sequence in the README is one of the stronger parts of the project because it shows how the bottleneck moved as each layer improved.</p>
-      <ul class="project-list">
-        <li>Early versions spent a lot of time in AST dispatch and RTTI-based type checks.</li>
-        <li>After that improved, runtime name lookup became a visible cost.</li>
-        <li>After lookup improved, object allocation and ownership churn became the dominant issue.</li>
-        <li>After the <code>Value</code> and arena refactor, over-persisting recursive call frames became the main memory issue.</li>
-        <li>After temporary call-frame separation, the remaining cost was mostly recursive AST evaluation with smaller overhead from arguments and general interpreter machinery.</li>
-      </ul>
-    </section>
+      <section class="project-section">
+        <h2>Build, test, and run</h2>
+        <p>The repository exposes the workflow through CMake presets, which keeps the available build modes explicit instead of hiding them behind ad hoc shell commands. The ordinary development path uses the debug preset, while progressively stronger optimized builds are available through <code>release</code>, <code>release-lto</code>, and <code>release-native-lto</code>.</p>
+        <div class="code-samples">
+          <pre><code>cmake --preset debug
+cmake --build --preset debug
 
-    <section class="project-section">
-      <h2>Refactorings and their effect</h2>
+cmake --preset release
+cmake --build --preset release
 
-      <p class="project-subheading">1. Removing expensive AST dispatch</p>
-      <p>The first optimization step was moving away from heavier runtime dispatch and RTTI-style checks in the evaluator.</p>
-      <ul class="project-list">
-        <li>AST nodes carry an explicit <code>NodeType</code>.</li>
-        <li>Evaluator logic dispatches by node kind.</li>
-        <li>Cloning and evaluation avoid more expensive runtime type paths.</li>
-      </ul>
+cmake --preset release-lto
+cmake --build --preset release-lto
 
-      <p class="project-subheading">2. Indexed symbol resolution</p>
-      <p>Instead of resolving names entirely through string-based environments at runtime, the interpreter assigns indexed references for globals, locals, and builtins ahead of time.</p>
-      <ul class="project-list">
-        <li>Fewer string operations in the hot path.</li>
-        <li>Cheaper local and global access.</li>
-        <li>Better scaling for deeply recursive programs.</li>
-      </ul>
-
-      <p class="project-subheading">3. <code>Value</code> as a tagged runtime handle</p>
-      <p>The runtime model uses immediate representations for simple values and heap-backed objects only where that is actually needed.</p>
-      <ul class="project-list">
-        <li><code>int</code> is immediate.</li>
-        <li><code>bool</code> is immediate.</li>
-        <li><code>null</code> is immediate.</li>
-        <li>Composite values remain heap-backed.</li>
-      </ul>
-
-      <p class="project-subheading">4. Scratch arena and persistent store</p>
-      <p>Composite values do not all share the same lifetime, so the runtime separates temporary work from values that must escape.</p>
-      <ul class="project-list">
-        <li><code>ScratchArena</code> handles temporary composites created during evaluation.</li>
-        <li><code>PersistentStore</code> keeps values that must outlive the current scratch lifetime.</li>
-      </ul>
-
-      <p class="project-subheading">5. Explicit promotion and detachment</p>
-      <p>The runtime makes lifetime transitions explicit through <code>promote(Value, PersistentStore&amp;)</code> and <code>detach(Value)</code>.</p>
-      <ul class="project-list">
-        <li>Temporary values stay temporary by default.</li>
-        <li>Escaping values are promoted deliberately.</li>
-        <li>Final top-level results can be detached safely.</li>
-      </ul>
-
-      <p class="project-subheading">6. Temporary call frames instead of persistent recursive frames</p>
-      <p>The README highlights this as one of the most important fixes. Ordinary recursive calls should not hold onto persistent lifetime unless something really escapes.</p>
-      <ul class="project-list">
-        <li>Normal calls use temporary stack-like <code>Environment</code> frames.</li>
-        <li>Persistent storage is reserved for closures or returned values that need to survive.</li>
-      </ul>
-
-      <p class="project-subheading">7. Small-arity argument fast path</p>
-      <p>After the larger lifetime issues were addressed, argument handling still showed up in profiles.</p>
-      <ul class="project-list">
-        <li>Common cases like 0, 1, and 2 arguments avoid allocating a <code>std::vector&lt;Value&gt;</code>.</li>
-        <li>This is especially helpful for recursive benchmark shapes like Fibonacci.</li>
-      </ul>
-
-      <p class="project-subheading">8. Build-level optimizations</p>
-      <p>The repository also supports stronger optimized builds through CMake presets, including <code>release</code>, <code>release-lto</code>, and <code>release-native-lto</code>.</p>
-      <ul class="project-list">
-        <li>The fastest preset combines release optimization, link-time optimization, and native CPU tuning.</li>
-        <li>The README explicitly notes that benchmark numbers should be read together with the chosen build preset.</li>
-      </ul>
-    </section>
-
-    <section class="project-section">
-      <h2>Current remaining bottlenecks</h2>
-      <p>The README is clear that the main remaining cost is no longer memory management itself but the nature of the interpreter.</p>
-      <ul class="project-list">
-        <li>Recursive AST evaluation.</li>
-        <li>Repeated tree-walking through <code>eval_node</code>.</li>
-        <li>Ordinary interpreter overhead around calls, branching, and expression evaluation.</li>
-      </ul>
-      <p>The suggested next major step in the README is some form of compilation or VM rather than another large AST-evaluator refactor.</p>
-    </section>
-
-    <section class="project-section">
-      <h2>Build, test, and run</h2>
-      <p>The repository exposes the workflow through CMake presets, which makes the different build modes explicit.</p>
-
-      <p class="project-subheading">Debug</p>
-      <div class="code-samples">
-        <pre><code>cmake --preset debug
-cmake --build --preset debug</code></pre>
-      </div>
-
-      <p class="project-subheading">Release</p>
-      <div class="code-samples">
-        <pre><code>cmake --preset release
-cmake --build --preset release</code></pre>
-      </div>
-
-      <p class="project-subheading">Release with LTO</p>
-      <div class="code-samples">
-        <pre><code>cmake --preset release-lto
-cmake --build --preset release-lto</code></pre>
-      </div>
-
-      <p class="project-subheading">Fastest local build</p>
-      <div class="code-samples">
-        <pre><code>cmake --preset release-native-lto
+cmake --preset release-native-lto
 cmake --build --preset release-native-lto</code></pre>
-      </div>
-
-      <p class="project-subheading">Tests</p>
-      <div class="code-samples">
-        <pre><code>ctest --preset debug --output-on-failure
+        </div>
+        <p>Tests can be run against either the debug or optimized configurations, and the project also includes a small REPL plus a dedicated benchmark target for the recursive Fibonacci workload that was used during profiling.</p>
+        <div class="code-samples">
+          <pre><code>ctest --preset debug --output-on-failure
 ctest --preset release-native-lto --output-on-failure</code></pre>
-      </div>
-
-      <p class="project-subheading">REPL and benchmark</p>
-      <div class="code-samples">
-        <pre><code>./build/debug/monkey_repl
+          <pre><code>./build/debug/monkey_repl
 ./build/release-native-lto/monkey_repl</code></pre>
-        <pre><code>&gt;&gt; let add = fn(x, y) { x + y; };
+          <pre><code>&gt;&gt; let add = fn(x, y) { x + y; };
 &gt;&gt; add(2, 3);
 5</code></pre>
-        <pre><code>./build/release-native-lto/monkey_performance_tests "Performance fibonacci(33)"</code></pre>
-      </div>
-    </section>
+          <pre><code>./build/release-native-lto/monkey_performance_tests "Performance fibonacci(33)"</code></pre>
+        </div>
+      </section>
 
-    <section class="project-section">
-      <h2>Inspiration</h2>
-      <p>The project follows the spirit and structure of <em>Writing an Interpreter in Go</em>, so if you know the book the overall shape is familiar: tokens, lexer, Pratt parser, AST, evaluator, environments, and closures.</p>
-      <p>The main difference is the implementation language and the amount of runtime optimization work layered on top of the basic interpreter design.</p>
-    </section>
+      <section class="project-section">
+        <h2>Background</h2>
+        <p>The project follows the spirit and structure of <em>Writing an Interpreter in Go</em>, so the overall shape is familiar if you know the book: tokens, lexer, Pratt parser, AST, evaluator, environments, and closures. What changes here is the implementation language and the amount of runtime work layered on top of the core interpreter design. That combination makes it useful both as a language implementation exercise and as a closer look at how apparently small runtime choices start to matter once an interpreter begins running more demanding programs.</p>
+      </section>
     </div>
   </article>
 </section>
