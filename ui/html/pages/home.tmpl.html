@@ -19,10 +19,13 @@
           alt="{{.ImageAlt}}"
         >
         <div class="project-content">
-          <p class="project-label">{{.Label}}</p>
           <h3>{{.Title}}</h3>
           <p class="project-summary-card">{{.Summary}}</p>
-          <p class="project-stack">{{.Stack}}</p>
+          <div class="project-tags" aria-label="Project technologies">
+            {{range .Tags}}
+            <span class="project-tag">{{.}}</span>
+            {{end}}
+          </div>
         </div>
       </article>
     </a>
