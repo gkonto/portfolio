@@ -29,8 +29,8 @@ var portfolioProjects = []projectCardData{
 		Label:       "lang://monkey-interpreter",
 		Summary:     "A modern C++ implementation of the Monkey language with a Pratt parser, tree-walking evaluator, REPL, tests, and runtime-focused optimization work.",
 		Stack:       "stack: C++ / CMake / Catch2 / interpreter internals",
-		ImagePath:   "/static/img/monkey-in-cpp-card.svg",
-		ImageAlt:    "Monkey in C++ project preview",
+		ImagePath:   "/static/img/monkey-in-cpp-card.png",
+		ImageAlt:    "Illustration showing 2 plus 3 times 4 and its syntax tree",
 		ProjectHref: "/projects/monkey-in-cpp",
 	},
 }

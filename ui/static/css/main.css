@@ -388,6 +388,11 @@ ul {
   text-align: left;
 }
 
+.project-showcase--single {
+  width: min(100%, 40rem);
+  margin: 0 auto 1rem;
+}
+
 .project-stack-line {
   margin-bottom: 0;
   color: var(--accent-strong);
