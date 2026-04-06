@@ -16,7 +16,7 @@
 
   <div class="projects-grid">
     {{range .Projects}}
-    <a class="project-link" href="/project/view/{{.ProjectID}}">
+    <a class="project-link" href="{{.ProjectHref}}">
       <article class="project-rectangle">
         <img
           class="project-image"
@@ -25,8 +25,8 @@
         >
         <div class="project-content">
           <p class="project-label">{{.Label}}</p>
-          <h3>{{.ProjectTitle}}</h3>
-          <p>{{.CardSummary}}</p>
+          <h3>{{.Title}}</h3>
+          <p>{{.Summary}}</p>
           <p class="project-stack">{{.Stack}}</p>
         </div>
       </article>

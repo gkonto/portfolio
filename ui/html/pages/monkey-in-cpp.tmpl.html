@@ -1,0 +1,103 @@
+{{define "title"}}Monkey in C++ | Portfolio{{end}}
+
+{{define "head"}}
+<meta
+  name="description"
+  content="Monkey in C++ is a tree-walking interpreter for the Monkey language built with a Pratt parser, explicit AST, REPL, tests, and runtime-oriented optimization work."
+>
+{{end}}
+
+{{define "main"}}
+<section class="section shell">
+  <article class="project-page">
+    <header class="project-header">
+      <p class="eyebrow">// lang://monkey-interpreter</p>
+      <h1>Monkey in C++</h1>
+      <p class="project-summary">A modern C++ implementation of the Monkey programming language from <em>Writing an Interpreter in Go</em>, built as a tree-walking interpreter with a Pratt parser, explicit AST, REPL, tests, and a lot of runtime-focused optimization work.</p>
+      <p class="project-links">
+        <a class="project-action" href="https://github.com/gkonto/monkey_in_cpp" target="_blank" rel="noreferrer">view source</a>
+      </p>
+      <p class="project-stack-line">stack: C++ / CMake / Catch2 / interpreter internals</p>
+    </header>
+
+    <section class="project-panel">
+      <h2>Overview</h2>
+      <p>This project follows the familiar Monkey language structure from Thorsten Ball’s book, but the implementation is written in modern C++ and pushes harder on runtime behavior than the original learning-oriented version.</p>
+      <p>The core flow stays clean: source text becomes tokens, the Pratt parser produces an AST, a resolver assigns indexed symbols, and the evaluator walks the tree to compute runtime values.</p>
+    </section>
+
+    <div class="project-columns">
+      <section class="project-panel">
+        <h2>Language support</h2>
+        <ul class="project-list">
+          <li>Integers, booleans, prefix and infix expressions.</li>
+          <li><code>if</code> / <code>else</code>, <code>let</code>, and <code>return</code>.</li>
+          <li>Functions and closures.</li>
+          <li>Strings, arrays, hashes, indexing, and builtins like <code>len</code>, <code>first</code>, <code>last</code>, <code>rest</code>, and <code>push</code>.</li>
+        </ul>
+      </section>
+
+      <section class="project-panel">
+        <h2>Interpreter structure</h2>
+        <ul class="project-list">
+          <li>A Pratt parser keeps precedence handling compact and extensible.</li>
+          <li>An explicit AST gives the evaluator a clear semantic structure to walk.</li>
+          <li>A resolver assigns indexed symbols for globals, locals, and builtins.</li>
+          <li>The project includes a REPL and a Catch2-based test suite.</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="project-columns">
+      <section class="project-panel">
+        <h2>Runtime work</h2>
+        <ul class="project-list">
+          <li>Moved away from heavier runtime AST dispatch toward explicit node kinds.</li>
+          <li>Replaced string-based identifier lookup in the hot path with indexed symbol resolution.</li>
+          <li>Uses a tagged <code>Value</code> model so immediates like integers, booleans, and null do not always become heap-backed objects.</li>
+          <li>Splits temporary and persistent composite storage with a scratch arena plus persistent store.</li>
+          <li>Separates temporary call frames from escaping closure state.</li>
+          <li>Adds a small-arity argument fast path for common call shapes.</li>
+        </ul>
+      </section>
+
+      <section class="project-panel">
+        <h2>Performance notes</h2>
+        <ul class="project-list">
+          <li>Local <code>fibonacci(33)</code> measurements are around <code>~1.3s - 1.6s</code> with the optimized preset.</li>
+          <li>Peak memory is reported around <code>~1.6MB - 1.8MB</code>.</li>
+          <li>The main remaining bottleneck is still the nature of recursive AST evaluation, not a single obvious memory-management issue.</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="project-columns">
+      <section class="project-panel">
+        <h2>Build, test, run</h2>
+        <div class="code-samples">
+          <pre><code>cmake --preset release-native-lto
+cmake --build --preset release-native-lto</code></pre>
+          <pre><code>ctest --preset release-native-lto --output-on-failure</code></pre>
+          <pre><code>./build/release-native-lto/monkey_repl
+./build/release-native-lto/monkey_performance_tests "Performance fibonacci(33)"</code></pre>
+        </div>
+      </section>
+
+      <section class="project-panel">
+        <h2>Example</h2>
+        <div class="code-samples">
+          <pre><code>let newAdder = fn(x) {
+  fn(y) { x + y; };
+};
+
+let addTwo = newAdder(2);
+addTwo(3);</code></pre>
+          <pre><code>&gt;&gt; let add = fn(x, y) { x + y; };
+&gt;&gt; add(2, 3);
+5</code></pre>
+        </div>
+      </section>
+    </div>
+  </article>
+</section>
+{{end}}

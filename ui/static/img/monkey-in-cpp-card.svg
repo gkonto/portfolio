@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Monkey in C++ project preview</title>
+  <desc id="desc">A dark code-style card preview for the Monkey in C++ interpreter project.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d1730"/>
+      <stop offset="100%" stop-color="#08101f"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <rect x="40" y="40" width="720" height="520" rx="24" fill="#0b1222" stroke="#33486d" stroke-width="2"/>
+  <rect x="68" y="74" width="664" height="54" rx="14" fill="#111b31"/>
+  <circle cx="98" cy="101" r="8" fill="#ff7b72"/>
+  <circle cx="124" cy="101" r="8" fill="#f2cc60"/>
+  <circle cx="150" cy="101" r="8" fill="#7ee787"/>
+
+  <text x="86" y="185" fill="#7ee787" font-size="30" font-family="JetBrains Mono, IBM Plex Mono, monospace">project://monkey_in_cpp</text>
+  <text x="86" y="238" fill="#f4f8ff" font-size="58" font-family="JetBrains Mono, IBM Plex Mono, monospace">Monkey in C++</text>
+  <text x="86" y="288" fill="#8ea0c1" font-size="24" font-family="JetBrains Mono, IBM Plex Mono, monospace">Pratt parser / AST / evaluator / REPL</text>
+
+  <rect x="86" y="334" width="628" height="158" rx="18" fill="#0f182c" stroke="#243552" stroke-width="2"/>
+  <text x="110" y="380" fill="#8bd3ff" font-size="22" font-family="JetBrains Mono, IBM Plex Mono, monospace">let fibonacci = fn(x) {</text>
+  <text x="138" y="416" fill="#dbe7ff" font-size="22" font-family="JetBrains Mono, IBM Plex Mono, monospace">if (x &lt; 2) { x } else {</text>
+  <text x="166" y="452" fill="#dbe7ff" font-size="22" font-family="JetBrains Mono, IBM Plex Mono, monospace">fibonacci(x - 1) + fibonacci(x - 2);</text>
+  <text x="138" y="488" fill="#dbe7ff" font-size="22" font-family="JetBrains Mono, IBM Plex Mono, monospace">}</text>
+  <text x="110" y="524" fill="#8bd3ff" font-size="22" font-family="JetBrains Mono, IBM Plex Mono, monospace">};</text>
+</svg>
