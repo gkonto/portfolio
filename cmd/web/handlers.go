@@ -16,6 +16,10 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	app.render(w, http.StatusOK, "home.tmpl.html", nil)
 }
 
+func (app *application) contact(w http.ResponseWriter, r *http.Request) {
+	app.render(w, http.StatusOK, "contact.tmpl.html", nil)
+}
+
 func (app *application) projectView(w http.ResponseWriter, r *http.Request) {
 	params := httprouter.ParamsFromContext(r.Context())
 

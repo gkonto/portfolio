@@ -3,6 +3,10 @@ document.documentElement.classList.add("js");
 const navLinks = Array.from(document.querySelectorAll(".nav-links a"));
 const sectionLinks = navLinks.filter((link) => link.hash);
 const homeLink = navLinks.find((link) => link.getAttribute("href") === "/");
+const pathLinks = navLinks.filter((link) => {
+  const href = link.getAttribute("href") || "";
+  return href.startsWith("/") && !link.hash;
+});
 
 const setActiveLink = (targetId = "") => {
   navLinks.forEach((link) => {
@@ -11,6 +15,11 @@ const setActiveLink = (targetId = "") => {
   });
 
   if (window.location.pathname !== "/") {
+    const activePathLink = pathLinks.find((link) => link.getAttribute("href") === window.location.pathname);
+    if (activePathLink) {
+      activePathLink.classList.add("is-active");
+      activePathLink.setAttribute("aria-current", "page");
+    }
     return;
   }
 

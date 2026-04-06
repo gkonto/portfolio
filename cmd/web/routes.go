@@ -18,6 +18,7 @@ func (app *application) routes() http.Handler {
 	router.Handler(http.MethodGet, "/static/*filepath", http.StripPrefix("/static", fileServer))
 
 	router.HandlerFunc(http.MethodGet, "/", app.home)
+	router.HandlerFunc(http.MethodGet, "/contact", app.contact)
 	router.HandlerFunc(http.MethodGet, "/project/view/:id", app.projectView)
 
 	standard := alice.New(app.recoverPanic, app.logRequest, secureHeaders)
