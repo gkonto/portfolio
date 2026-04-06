@@ -280,10 +280,15 @@ ul {
   flex: 1;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
   gap: 0.35rem;
   padding: 1.1rem;
-  text-align: center;
+  text-align: left;
+}
+
+.project-content > * {
+  width: 100%;
+  text-align: left;
 }
 
 .project-label,
@@ -300,6 +305,11 @@ ul {
   color: #f7fbff;
   font-size: 1rem;
   line-height: 1.35;
+}
+
+.project-summary-card {
+  width: 100%;
+  text-align: left;
 }
 
 .project-stack {
@@ -330,9 +340,10 @@ ul {
 }
 
 .project-summary {
-  width: min(100%, 46rem);
-  margin: 0 auto 1rem;
+  width: 100%;
+  margin: 0 0 1rem;
   color: var(--muted);
+  text-align: left;
 }
 
 .project-links {
