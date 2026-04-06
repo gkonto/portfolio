@@ -19,68 +19,98 @@
       </p>
 
       <div class="project-showcase-grid">
-        <div class="project-showcase">
+        <figure class="project-showcase">
           <img src="/static/img/inclens-topdown.gif" alt="IncLens top-down tree view demo">
-        </div>
-        <div class="project-showcase">
+          <figcaption>Tree view for navigating the include hierarchy directly.</figcaption>
+        </figure>
+        <figure class="project-showcase">
           <img src="/static/img/inclens-flamegraph.gif" alt="IncLens flamegraph view demo">
-        </div>
+          <figcaption>Flamegraph view for judging proportional weight by total lines of code.</figcaption>
+        </figure>
       </div>
 
       <p class="project-stack-line">stack: Go / Bubble Tea / C++ include analysis</p>
     </header>
 
-    <section class="project-panel">
+    <div class="project-body">
+    <section class="project-section">
       <h2>Overview</h2>
-      <p>IncLens is built around a practical workflow: generate a preprocessed C++ translation unit with <code>g++</code>, then inspect the resulting include structure from the terminal.</p>
-      <p>The point is to make dependency structure easier to understand, surface heavy includes, and give a faster path to compile-time investigation than reading raw preprocessor output.</p>
+      <p class="project-lead">IncLens takes something most people never want to read directly, a preprocessed C++ source file, and turns it into an interface you can actually navigate.</p>
+      <p>It is built around a very practical workflow: generate a preprocessed translation unit with <code>g++</code>, feed the resulting <code>.ii</code> file into the tool, and then inspect the include structure from the terminal instead of scrolling through raw preprocessor output.</p>
+      <p>The value is straightforward. It helps make dependency structure visible, surfaces heavy includes earlier, and gives a faster path to compile-time investigation when the include graph starts getting harder to reason about by inspection.</p>
     </section>
 
-    <div class="project-columns">
-      <section class="project-panel">
-        <h2>Top-down tree view</h2>
-        <ul class="project-list">
-          <li>Navigate the include hierarchy as a tree.</li>
-          <li>Expand and collapse nodes with keyboard controls.</li>
-          <li>Search includes and jump through matches.</li>
-          <li>Show or hide columns and sort by bytes or lines of code.</li>
-        </ul>
-      </section>
+    <section class="project-section">
+      <h2>The input model</h2>
+      <p>The whole tool is built around the idea that the preprocessed file already contains the structure you need, but not in a form that is pleasant to inspect.</p>
+      <blockquote class="project-callout">
+        <p>A <code>.ii</code> file is the fully preprocessed C++ source after <code>#include</code> expansion and macro processing. IncLens treats that as a data source for include analysis instead of as something meant for humans to read line by line.</p>
+      </blockquote>
+      <p>That makes the tool feel focused. It is not trying to be a general-purpose IDE, compiler frontend, or indexing service. It does one thing: turn preprocessor output into something navigable and useful.</p>
+    </section>
 
-      <section class="project-panel">
-        <h2>Flamegraph view</h2>
-        <ul class="project-list">
-          <li>Visualize total lines of code proportionally.</li>
-          <li>Move through the graph with arrow keys.</li>
-          <li>Zoom in with <code>Enter</code> and back out with <code>Esc</code>.</li>
-          <li>Inspect the current file name and line count in the info panel.</li>
-        </ul>
-      </section>
-    </div>
+    <section class="project-section">
+      <h2>Two views of the same problem</h2>
+      <p>The README sets the product up around two complementary views. That is the right design choice here, because include structure has two different questions behind it: what includes what, and where is the weight actually concentrated.</p>
 
-    <div class="project-columns">
-      <section class="project-panel">
-        <h2>Workflow</h2>
-        <ul class="project-list">
-          <li>Generate a preprocessed <code>.ii</code> file with <code>g++</code>.</li>
-          <li>Run IncLens against that file.</li>
-          <li>Switch between the tree view and flamegraph depending on whether you want structure or proportional weight.</li>
-        </ul>
+      <p class="project-subheading">Top-down tree view</p>
+      <p>The tree view is the structural mode. This is the one you use when you want to walk the include hierarchy in a way that still feels close to the source-level mental model.</p>
+      <ul class="project-list">
+        <li>Navigate the include hierarchy as a tree.</li>
+        <li>Expand and collapse nodes with keyboard controls.</li>
+        <li>Search includes and jump through matches.</li>
+        <li>Show or hide columns and sort by bytes or lines of code.</li>
+      </ul>
+      <p>The useful detail is that this is not just a raw tree dump. The sorting controls and file metrics make it a diagnostic view, not just a visualization.</p>
 
-        <div class="code-samples">
-          <pre><code>g++ -E -o example.ii example.cpp</code></pre>
-          <pre><code>./inclensapp -file example.ii</code></pre>
-        </div>
-      </section>
+      <p class="project-subheading">Flamegraph view</p>
+      <p>The flamegraph mode is the proportional mode. Instead of asking for exact structure first, it asks where the code volume is concentrated and how large different parts of the include tree actually are.</p>
+      <ul class="project-list">
+        <li>Visualize total lines of code proportionally.</li>
+        <li>Move through the graph with arrow keys.</li>
+        <li>Zoom in with <code>Enter</code> and back out with <code>Esc</code>.</li>
+        <li>Inspect the current file name and line count in the info panel.</li>
+      </ul>
+      <p>That pairing works well. The tree helps with orientation, and the flamegraph helps with weight.</p>
+    </section>
 
-      <section class="project-panel">
-        <h2>Why I like it</h2>
-        <ul class="project-list">
-          <li>It takes a noisy artifact and turns it into something readable.</li>
-          <li>It stays in the terminal, which fits naturally into a C++ workflow.</li>
-          <li>It focuses on a narrow problem and gives two useful views of the same data.</li>
-        </ul>
-      </section>
+    <section class="project-section">
+      <h2>Workflow</h2>
+      <p>The user flow is intentionally small, which is part of the appeal. There is no large setup story and no complicated project indexing step in the README. You prepare the input once, then run the tool.</p>
+      <ul class="project-list">
+        <li>Generate a preprocessed <code>.ii</code> file with <code>g++</code>.</li>
+        <li>Run IncLens against that file.</li>
+        <li>Switch between the tree view and flamegraph depending on whether you want structure or proportional weight.</li>
+      </ul>
+
+      <div class="code-samples">
+        <pre><code>g++ -E -o example.ii example.cpp</code></pre>
+        <pre><code>./inclensapp -file example.ii</code></pre>
+      </div>
+      <p>The installation story in the README is similarly light: clone the repository, run <code>./setup.sh</code>, and use Go 1.20+.</p>
+    </section>
+
+    <section class="project-section">
+      <h2>Interaction details that make it better</h2>
+      <p>The project gets more convincing once you look at the small controls rather than just the headline features.</p>
+      <ul class="project-list">
+        <li>Search and next-match navigation matter because real include graphs get wide quickly.</li>
+        <li>Expand-all and collapse-all help when you need to reset your view after drilling in.</li>
+        <li>Column toggling and sort options turn the tree into a usable investigation surface instead of a static diagram.</li>
+        <li>Keyboard-driven zoom in the flamegraph keeps the whole experience inside the terminal workflow.</li>
+      </ul>
+    </section>
+
+    <section class="project-section">
+      <h2>Why it works well as a project</h2>
+      <p>What I like most about it is that the scope is narrow, the workflow is clear, and the output is genuinely useful if you work in C++.</p>
+      <ul class="project-list">
+        <li>It takes a noisy artifact and turns it into something readable.</li>
+        <li>It stays in the terminal, which fits naturally into a C++ workflow.</li>
+        <li>It focuses on a narrow problem and gives two useful views of the same data.</li>
+        <li>It is a good example of a tool that feels small in interface but still solves a real engineering pain point.</li>
+      </ul>
+    </section>
     </div>
   </article>
 </section>
