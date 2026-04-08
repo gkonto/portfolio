@@ -69,21 +69,3 @@ if (window.location.pathname === "/") {
     setActiveLink(window.location.hash.replace("#", ""));
   });
 }
-
-const spotlightTargets = document.querySelectorAll(".project-rectangle, .contact-card");
-
-spotlightTargets.forEach((target) => {
-  target.addEventListener("pointermove", (event) => {
-    const rect = target.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / rect.width) * 100;
-    const y = ((event.clientY - rect.top) / rect.height) * 100;
-
-    target.style.setProperty("--spot-x", `${x}%`);
-    target.style.setProperty("--spot-y", `${y}%`);
-  });
-
-  target.addEventListener("pointerleave", () => {
-    target.style.removeProperty("--spot-x");
-    target.style.removeProperty("--spot-y");
-  });
-});
