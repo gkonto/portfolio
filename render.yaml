@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: checkpoint-core
+    name: gkonto-portfolio
     runtime: go
     region: frankfurt
     plan: free
