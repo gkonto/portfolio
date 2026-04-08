@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{block "title" .}}Checkpoint Core{{end}}</title>
+  <title>{{block "title" .}}Portfolio{{end}}</title>
   <link rel="stylesheet" href="/static/css/main.css">
   {{block "head" .}}{{end}}
 </head>
@@ -13,21 +13,20 @@
 <body>
   <header class="site-header">
     <div class="shell">
-      <h1 class="site-title">Checkpoint Core<span class="site-byline">by George Kontogiannis</span></h1>
-      <p class="site-subtitle">A space for the programming stuff I spend my free time on.</p>
-      {{template "nav" .}}
+      <p class="site-subtitle">My cave.</p>
+      <p class="header-socials">
+        <a class="social-icon social-icon--linkedin" href="https://linkedin.com/in/george-kontogiannis-711274110" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M6.94 8.5V19H3.5V8.5zm.24-3.24c0 1.01-.76 1.82-1.95 1.82h-.02c-1.11 0-1.86-.81-1.86-1.82 0-1.03.77-1.82 1.9-1.82s1.9.79 1.93 1.82M20.5 12.58V19h-3.43v-6.03c0-1.51-.54-2.54-1.89-2.54-1.03 0-1.64.69-1.9 1.36-.1.24-.12.58-.12.92V19H9.73s.04-9.81 0-10.5h3.43v1.49c.46-.7 1.27-1.7 3.1-1.7 2.27 0 3.98 1.48 3.98 4.66"/>
+          </svg>
+        </a>
+      </p>
     </div>
   </header>
 
   <main class="site-main">
     {{block "main" .}}{{end}}
   </main>
-
-  <footer class="site-footer" id="contact">
-    <div class="shell footer-contact footer-content">
-      <!-- <p class="footer-copyright">&copy; 2026 George Kontogiannis</p> -->
-    </div>
-  </footer>
 
   <script src="/static/js/main.js" defer></script>
 </body>

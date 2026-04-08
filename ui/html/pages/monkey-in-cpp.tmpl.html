@@ -1,4 +1,4 @@
-{{define "title"}}{{.Title}} | Checkpoint Core{{end}}
+{{define "title"}}{{.Title}} | Portfolio{{end}}
 
 {{define "head"}}
 <meta
@@ -14,6 +14,7 @@
       <h1>{{.Title}}</h1>
       <p class="project-summary">{{.Summary}}</p>
       <p class="project-links">
+        <a class="project-action" href="/">home</a>
         <a class="project-action" href="{{.RepoURL}}" target="_blank" rel="noreferrer">view source</a>
       </p>
       <div class="project-showcase project-showcase--single">

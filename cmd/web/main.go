@@ -17,8 +17,19 @@ type application struct {
 }
 
 func main() {
-	addr := flag.String("addr", ":4000", "HTTP network address")
+	addr := flag.String("addr", "", "HTTP network address")
+	tlsCertFile := flag.String("tls-cert", os.Getenv("TLS_CERT_FILE"), "TLS certificate file")
+	tlsKeyFile := flag.String("tls-key", os.Getenv("TLS_KEY_FILE"), "TLS key file")
 	flag.Parse()
+
+	listenAddr := *addr
+	if listenAddr == "" {
+		port := os.Getenv("PORT")
+		if port == "" {
+			port = "4000"
+		}
+		listenAddr = ":" + port
+	}
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
@@ -34,21 +45,30 @@ func main() {
 		templateCache: templateCache,
 	}
 
-	tlsConfig := &tls.Config{
-		CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256},
-	}
-
 	srv := &http.Server{
-		Addr:         *addr,
+		Addr:         listenAddr,
 		ErrorLog:     errorLog,
 		Handler:      app.routes(),
-		TLSConfig:    tlsConfig,
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
 
-	infoLog.Printf("Starting server on %s", *addr)
-	err = srv.ListenAndServeTLS("./tls/cert.pem", "./tls/key.pem")
+	if *tlsCertFile != "" || *tlsKeyFile != "" {
+		if *tlsCertFile == "" || *tlsKeyFile == "" {
+			errorLog.Fatal("both -tls-cert and -tls-key must be provided")
+		}
+
+		srv.TLSConfig = &tls.Config{
+			CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256},
+		}
+
+		infoLog.Printf("Starting HTTPS server on %s", listenAddr)
+		err = srv.ListenAndServeTLS(*tlsCertFile, *tlsKeyFile)
+		errorLog.Fatal(err)
+	}
+
+	infoLog.Printf("Starting HTTP server on %s", listenAddr)
+	err = srv.ListenAndServe()
 	errorLog.Fatal(err)
 }
