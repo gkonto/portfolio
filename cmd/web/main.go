@@ -18,6 +18,7 @@ type application struct {
 
 func main() {
 	addr := flag.String("addr", "", "HTTP network address")
+	exportDir := flag.String("export-dir", "", "Write a static export to this directory and exit")
 	tlsCertFile := flag.String("tls-cert", os.Getenv("TLS_CERT_FILE"), "TLS certificate file")
 	tlsKeyFile := flag.String("tls-key", os.Getenv("TLS_KEY_FILE"), "TLS key file")
 	flag.Parse()
@@ -43,6 +44,15 @@ func main() {
 		errorLog:      errorLog,
 		infoLog:       infoLog,
 		templateCache: templateCache,
+	}
+
+	if *exportDir != "" {
+		if err := app.exportSite(*exportDir); err != nil {
+			errorLog.Fatal(err)
+		}
+
+		infoLog.Printf("Exported static site to %s", *exportDir)
+		return
 	}
 
 	srv := &http.Server{
